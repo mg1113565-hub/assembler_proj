@@ -17,4 +17,4 @@ public:
 
 private:
     std::unordered_map<std::string, int> table;
-}
+};
