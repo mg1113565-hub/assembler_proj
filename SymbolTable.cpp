@@ -4,15 +4,6 @@ SymbolTable::SymbolTable()
 {
 }
 
-void SymbolTable::addEntry(std::string symbol, int address)
-{
-    if (!(table.contains(symbol)))
-    {
-        table[symbol] = address;
-    }
-    // do nothing if entry already exists
-}
-
 bool SymbolTable::contains(std::string symbol)
 {
 
@@ -26,12 +17,21 @@ bool SymbolTable::contains(std::string symbol)
     }
 }
 
+void SymbolTable::addEntry(std::string symbol, int address)
+{
+    if (!((*this).contains(symbol)))
+    {
+        table[symbol] = address;
+    }
+    // do nothing if entry already exists
+}
+
 // defo need to check contains before calling this
 int SymbolTable::getAddress(std::string symbol)
 {
     int result{};
 
-    if (!(table.contains(symbol)))
+    if (!((*this).contains(symbol)))
     {
         result = table[symbol];
     }
