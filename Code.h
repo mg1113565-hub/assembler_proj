@@ -2,14 +2,13 @@
 class Code
 {
 public:
-    std::string dest(std::string destInstr);
+    std::string dest(std::string destInstr) const;
 
-    std::string comp(std::string compInstr);
+    std::string comp(std::string compInstr) const;
 
-    std::string jump(std::string jumpInstr);
+    std::string jump(std::string jumpInstr) const;
 
     Code();
-    Code ~;
 
 private:
     std::unordered_map<std::string, std::string> compTbl;

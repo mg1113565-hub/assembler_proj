@@ -45,23 +45,50 @@ Code::Code()
     destTbl["M"] = "001";
     destTbl["D"] = "010";
     destTbl["DM"] = "011";
+    destTbl["MD"] = "011";
+
     destTbl["A"] = "100";
     destTbl["AM"] = "101";
     destTbl["AD"] = "110";
-    destTbl["ADM"] = "101";
+    destTbl["ADM"] = "111";
+    destTbl["AMD"] = "111";
 }
 
-std::string Code::dest(std::string destInstr)
+std::string Code::dest(std::string destInstr) const
 {
-    return destTbl[destInstr];
+    auto iter = destTbl.find(destInstr);
+    if (iter != destTbl.end())
+    {
+        return iter->second;
+    }
+    else
+    {
+        throw std::invalid_argument("unknown dest mnemonic: " + destInstr);
+    }
 }
 
-std::string Code::comp(std::string compInstr)
+std::string Code::comp(std::string compInstr) const
 {
-    return compTbl[compInstr];
+    auto iter = compTbl.find(compInstr);
+    if (iter != compTbl.end())
+    {
+        return iter->second;
+    }
+    else
+    {
+        throw std::invalid_argument("unknown comp mnemonic: " + compInstr);
+    }
 }
 
-std::string Code::jump(std::string jumpInstr)
+std::string Code::jump(std::string jumpInstr) const
 {
-    return jumpTbl[jumpInstr];
+    auto iter = jumpTbl.find(jumpInstr);
+    if (iter != jumpTbl.end())
+    {
+        return iter->second;
+    }
+    else
+    {
+        throw std::invalid_argument("unknown jump mnemonic: " + jumpInstr);
+    }
 }
