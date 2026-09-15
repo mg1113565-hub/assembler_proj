@@ -8,6 +8,9 @@ public:
 
     std::string jump(std::string jumpInstr);
 
+    Code();
+    Code ~;
+
 private:
     std::unordered_map<std::string, std::string> compTbl;
     std::unordered_map<std::string, std::string> jumpTbl;
