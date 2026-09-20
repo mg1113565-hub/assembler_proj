@@ -3,23 +3,27 @@
 #include "SymbolTable.h"
 #include <iostream>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
-  if (argc != 2) {
+  if (argc != 2)
+  {
     std::cerr << "Usage: HackAssembler <inputfile>" << std::endl;
     return 1;
   }
 
   std::string inputFile = argv[1];
   std::ifstream input(inputFile);
-  if (!input.is_open()) {
+  if (!input.is_open())
+  {
     std::cerr << "Error: Could not open input file " << inputFile << std::endl;
     return 1;
   }
   std::string outputFile =
       inputFile.substr(0, inputFile.find_last_not_of(".asm")) + ".hack";
   std::ofstream output(outputFile);
-  if (!output.is_open()) {
+  if (!output.is_open())
+  {
     std::cerr << "Error: Could not open output file " << outputFile
               << std::endl;
     return 1;
@@ -30,7 +34,8 @@ int main(int argc, char *argv[]) {
   Code code;
 
   // First pass: get rid of the white space
-  while (parser.hasMoreLines()) {
+  while (parser.hasMoreLines())
+  {
     parser.advance();
   }
 
@@ -41,9 +46,11 @@ int main(int argc, char *argv[]) {
   int variableAddress = 16; // Start allocating addresses for variables at 16
 
   // Second pass: handling only label declarations
-  while (parser.hasMoreLines()) {
+  while (parser.hasMoreLines())
+  {
     std::string instructionType = parser.instructionType();
-    if (instructionType == "L_INSTRUCTION") {
+    if (instructionType == "L_INSTRUCTION")
+    {
       std::string symbol = parser.symbol();
       symbolTable.addEntry(symbol, variableAddress);
     }
@@ -54,21 +61,48 @@ int main(int argc, char *argv[]) {
   input.seekg(0, std::ios::beg);
 
   // Third pass: handling A and C instructions
-  while (parser.hasMoreLines()) {
+  while (parser.hasMoreLines())
+  {
     parser.advance();
     std::string instructionType = parser.instructionType();
-    if (instructionType == "A_INSTRUCTION") {
+    // translate A instructions
+    if (instructionType == "A_INSTRUCTION")
+    {
       std::string symbol = parser.symbol();
       int address;
-      if (symbolTable.contains(symbol)) {
+      if (symbolTable.contains(symbol))
+      {
         address = symbolTable.getAddress(symbol);
-      } else {
+      }
+      else
+      {
         address = variableAddress;
         symbolTable.addEntry(symbol, variableAddress);
         variableAddress++;
       }
-      std::string dest = "null";
-      std::string comp = "null";
-      std::string jump = "null";
+    }
+
+    // translate C instructions
+    if (instructionType == "C_INSTRUCTION")
+    {
+      std::string symbol = parser.symbol();
+      int address;
+      if (symbolTable.contains(symbol))
+      {
+        address = symbolTable.getAddress(symbol);
+      }
+      else
+      {
+        address = variableAddress;
+        symbolTable.addEntry(symbol, variableAddress);
+        variableAddress++;
+      }
+      std::string dest = dest();
+      std::string comp = comp();
+      std::string jump = jump();
+
+      std::string bin = code.dest(dest);
+      bin += code.comp(comp);
+      bin += code.jump(jump);
     }
   }
