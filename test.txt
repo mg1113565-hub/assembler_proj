@@ -1,5 +1,0 @@
-(START)    
-@i        
-M=0         
-@START     
-0;JMP     
