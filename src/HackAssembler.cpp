@@ -47,7 +47,6 @@ int main(int argc, char *argv[]) {
   int variableAddress =
       16; // Start allocating addresses for variables starting at 16
   while (parser.advance()) {
-    std::cerr << parser.instructionType() << "  " << parser.symbol() << '\n';
     std::string instructionType = parser.instructionType();
 
     if (instructionType == "L_INSTRUCTION") {
