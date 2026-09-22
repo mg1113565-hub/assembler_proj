@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
       romAddress++;
     }
   }
-  // reset file pointer to beginning of file for third pass
+  // reset file pointer to beginning of file for second pass
   parser.reset();
 
   // Second pass: handling A and C instructions

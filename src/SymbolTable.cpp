@@ -41,8 +41,5 @@ int SymbolTable::getAddress(std::string symbol) {
   if ((*this).contains(symbol)) {
     result = table[symbol];
   }
-
-  // returning 0 is the flag for not valid since we cant assign any labels or
-  // variable to 0
   return result;
 }
