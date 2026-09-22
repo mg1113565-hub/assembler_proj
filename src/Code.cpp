@@ -59,9 +59,8 @@ std::string Code::dest(std::string destInstr) const {
   if (iter != destTbl.end()) {
     return iter->second;
   } else {
-    throw std::invalid_argument("unknown dest mnemonic: " + destInstr);
+    return "null";
   }
-  return "null";
 }
 
 std::string Code::comp(std::string compInstr) const {
@@ -69,16 +68,14 @@ std::string Code::comp(std::string compInstr) const {
   if (iter != compTbl.end()) {
     return iter->second;
   } else {
-    throw std::invalid_argument("unknown comp mnemonic: " + compInstr);
+    return "null";
   }
-  return "null";
 }
 std::string Code::jump(std::string jumpInstr) const {
   auto iter = jumpTbl.find(jumpInstr);
   if (iter != jumpTbl.end()) {
     return iter->second;
   } else {
-    throw std::invalid_argument("unknown jump mnemonic: " + jumpInstr);
+    return "null";
   }
-  return "null";
 }

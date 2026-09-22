@@ -21,21 +21,24 @@ bool Parser::hasMoreLines() {
   return file.peek() != std::char_traits<char>::eof();
 }
 
-// only call if hasMoreLines is true
-void Parser::advance() {
-  do {
-
-    std::getline(file, currInstruction);
-
+bool Parser::advance() {
+  while (std::getline(file, currInstruction)) {
     auto it = currInstruction.find("//");
     if (it != std::string::npos) {
       currInstruction.erase(it);
     }
-    auto new_end =
-        std::remove(currInstruction.begin(), currInstruction.end(), ' ');
-    currInstruction.erase(new_end, currInstruction.end());
 
-  } while (currInstruction.empty() && hasMoreLines());
+    currInstruction.erase(
+        std::remove_if(currInstruction.begin(), currInstruction.end(),
+                       [](unsigned char c) { return std::isspace(c); }),
+        currInstruction.end());
+
+    if (!currInstruction.empty()) {
+      return true;
+    }
+  }
+  currInstruction.clear();
+  return false;
 }
 
 std::string Parser::instructionType() {

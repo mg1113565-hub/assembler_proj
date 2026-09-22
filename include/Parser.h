@@ -11,7 +11,7 @@ public:
 
   bool hasMoreLines();
 
-  void advance();
+  bool advance();
 
   std::string instructionType();
 

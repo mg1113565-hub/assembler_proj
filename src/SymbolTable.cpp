@@ -7,7 +7,6 @@ SymbolTable::SymbolTable() {
     base += std::to_string(i);
     (*this).addEntry(base, i);
     base.erase(1);
-    i++;
   }
 
   (*this).addEntry("SCREEN", 16384);
