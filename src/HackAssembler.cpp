@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
   std::string inputFile = argv[1];
 
   std::string outputFile =
-      inputFile.substr(0, inputFile.find_last_not_of(".asm")) + ".hack";
+      inputFile.substr(0, inputFile.rfind(".asm")) + ".hack";
   std::ofstream output(outputFile);
   if (!output.is_open()) {
     std::cerr << "Error: Could not open output file " << outputFile
@@ -45,6 +45,8 @@ int main(int argc, char *argv[]) {
     if (instructionType == "L_INSTRUCTION") {
       std::string symbol = parser.symbol();
       symbolTable.addEntry(symbol, variableAddress);
+      variableAddress++; // Increment variableAddress for the next available
+                         // address
     }
     parser.advance();
   }
@@ -53,7 +55,6 @@ int main(int argc, char *argv[]) {
 
   // Third pass: handling A and C instructions
   while (parser.hasMoreLines()) {
-    parser.advance();
     std::string instructionType = parser.instructionType();
     std::string binaryCode;
 
@@ -63,32 +64,30 @@ int main(int argc, char *argv[]) {
       if (symbolTable.contains(symbol)) {
         address = symbolTable.getAddress(symbol);
       } else {
-        address = variableAddress;
-        symbolTable.addEntry(symbol, variableAddress);
-        variableAddress++;
+        if (isdigit(symbol[0])) {
+          address = std::stoi(symbol);
+        } else {
+          address = variableAddress;
+          symbolTable.addEntry(symbol, variableAddress);
+          variableAddress++;
+        }
       }
       std::bitset<16> code(address);
       // translate the A-instruction to binary
       binaryCode = code.to_string();
+      parser.advance();
     }
 
     // translate C instructions
     if (instructionType == "C_INSTRUCTION") {
-      std::string symbol = parser.symbol();
-      int address = 0;
-      if (symbolTable.contains(symbol)) {
-        address = symbolTable.getAddress(symbol);
-      } else {
-        address = variableAddress;
-        symbolTable.addEntry(symbol, variableAddress);
-        variableAddress++;
-      }
       std::string dest = parser.dest();
       std::string comp = parser.comp();
       std::string jump = parser.jump();
 
       // Translate the C-instruction to binary
-      binaryCode = code.comp(comp) + code.dest(dest) + code.jump(jump);
+      binaryCode = "111" + code.comp(comp) + code.dest(dest) + code.jump(jump);
+      std::cout << binaryCode << std::endl;
+      parser.advance();
     }
     output << binaryCode << std::endl;
   }
